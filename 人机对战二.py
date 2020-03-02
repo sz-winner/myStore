@@ -1,10 +1,11 @@
-# 人机PK小游戏，随机生成血量和攻击力，三盘两胜
+# 人机PK小游戏，随机生成血量和攻击力，三盘两胜，然后可自选增加的比赛次数
 import time
 import random
+count = 4
 while True:
     player_score = 0
     enemy_score = 0
-    for i in range(1, 4):
+    for i in range(1, count):
         player_life = random.randint(100, 150)
         player_attack = random.randint(30, 50)
         enemy_life = random.randint(100, 150)
@@ -73,11 +74,13 @@ while True:
         # print('双方打平！最终比分\n【玩家】：【敌人】 %d：%d' % (player_score, enemy_score))
         print('双方打平！最终比分\n【玩家】：【敌人】 {}：{}'.format(player_score, enemy_score))
     print('                      ')
-    a1 = input('要继续游戏吗？收入n或N退出，其它字母则继续')
+    a1 = input('小样，还要不要再打呀？（输入n或N退出，其它字母则继续）')
     if a1 in ('n', 'N'):
-        print('----退出游戏！----')
+        print('----靠！打不过你，我还躲不过你？！老子不跟你玩了----')
         time.sleep(1.5)
         break
     else:
+        count = int(input('我看你还能再打几局？（请输入一个整数）'))+1
+        print('我不服输，我要再跟你大战{}回合!'.format(count))
         print('----继续游戏！----')
         time.sleep(1.5)

@@ -1,3 +1,4 @@
+# 深夜食堂开张记
 import random   # 引入random模块
 appetizer1 = ['话梅花生', '拍黄瓜', '凉拌三丝']
 appetizer2 = ['豆腐脑', '冰镇绿豆糖水', '红枣银耳糖水']
