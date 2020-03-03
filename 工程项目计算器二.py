@@ -28,15 +28,19 @@ def estimate_period(size, number):
 
 
 def main():
-    print('----这是一个计算工程项目工期或工人数量的小程序----')
-    types = int(input('请选择计算类型：1-人力计算，2-工期计算\n'))
-    if types == 1:
-        estimate_period(0, 0)
-    elif types == 2:
-        estimate_workers(0, 0)
-    else:
-        print('输入错误，请重新输入‘1’或‘2’：')
-    print('----程序结束----')
-    
+    while again:
+        print('----欢迎使用工程项目计算器----')
+        types = int(input('请选择计算类型：1-人力计算，2-工期计算\n'))
+        if types == 1:
+            estimate_period(0, 0)
+        elif types == 2:
+            estimate_workers(0, 0)
+        else:
+            print('输入错误，只能输入‘1’或‘2’：')
+        q1 = print('是否要继续计算？继续请输入y或Y，否则退出')
+        if q1 not in('y', 'Y'):
+            again = False
+        print('----程序结束----')
+
 
 main()
