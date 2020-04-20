@@ -1,5 +1,5 @@
 import csv
-with open('D:\\Python\\Property_test.csv', 'w', newline='') as f:
+with open('D:\\Python\\Property_test.csv', 'w', newline='', encoding='GB2312') as f:
     writer = csv.writer(f, dialect='excel')  # dialect设定了文件格式
     header = ['小区名称', '地址', '建筑时间', '楼栋', '单元', '门牌', '朝向', '面积', '房间', '客厅', '卫生间']
     writer.writerow(header)  # 写入表头

@@ -1,30 +1,53 @@
-# 考勤统计器
-# 上班时间8:30，下班时间17:30，等于这个时间，不算迟到早退
-# 迟到半小时内算迟到，超过半小时在1小时内，算旷工半天，迟到超过1小时，算旷工一天
-# 每月允许3次忘记打卡
-# 节假日及周末不上班
-# 需要统计是否迟到、早退、旷工、加班、值班、调休
-# import pandas.io.excel._openpyxl
+import requests, json
+session = requests.session()  # 创建会话
+headers = {
+    'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+}  # 添加请求头，避开反爬机制
 
-import time
 
-adv = '欢迎参加python小课学习班！'
-# adv=input("请输入一段广告语：")
-while 1:
-    fx = input("请输入滚动的方向（L/R)").upper()  # 用upper()函数，表示将输入的字母强制转为大写
-    if fx in ['L', 'R']:
-        break
-    print("您输入的有误，请重新输入！")
+def cookies_read():  # 创建读取cookies的函数
+    cookies_txt = open('cookies.txt', 'r')  # 以只读方式打开cookies文件
+    cookies_dict = json.loads(cookies_txt.read())  # 调用json模块的loads函数，把字符串转换成字典
+    cookies = requests.utils.cookiejar_from_dict(cookies_dict)  # 把字典格式的cookies转换成浏览器能识别的cookies
+    return (cookies)
 
-while 1:
-    sd = input("请输入滚动的速度（请输入一个整数）:")
-    if sd.isnumeric():
-        break
-    print("您输入的有误，请重新输入！")
-while 1:
-    if fx == "R":
-        adv = adv[-1] + adv[:-1]
-    else:
-        adv = adv[1:] + adv[0]
-    print('\r' + adv, end='', flush=True)
-    time.sleep(int(sd))
+
+def sign_in():  # 创建登录博客的函数
+    url = 'https://wordpress-edu-3autumn.localprod.oc.forchange.cn/wp-login.php'  # 想要登录的网址
+    data = {'log': input('请输入您的登录账号：'),
+            'pwd': input('请输入您的登录密码：'),
+            'wp-submit': '登录',
+            'redirect_to': 'https://wordpress-edu-3autumn.localprod.oc.forchange.cn',
+            'testcookies': '1'}  # 登录参数
+    session.post(url, headers=headers, data=data)  # 在会话下，用post发起登录请求
+    cookies_dict = requests.utils.dict_from_cookiejar(session.cookies)  # 把cookies转换成字典
+    cookies_str = json.dumps(cookies_dict)  # 调用json模块的dump函数，把cookies从字典转换成字符串
+    f = open('cookies.txt', 'w')  # 以写模式创建名为cookies.txt的文件
+    f.write(cookies_str)  # 把字符串格式的cookies写入文件
+    f.close()  # 关闭文件
+
+
+def write_message():  # 创建发表评论的函数
+    url_2 = 'https://wordpress-edu-3autumn.localprod.oc.forchange.cn/wp-comments-post.php'
+    #  要评论的博客的文章地址
+    data_2 = {
+        'comment': input('请输入您想评论的内容：'),
+        'submit': '发表评论',
+        'commnet_post_ID': '13',
+        'comment_parent': '0'
+    }  # 评论的参数
+    return(session.post(url_2, headers=headers, data=data_2))
+
+
+try:  # 执行cookies_read函数，尝试读取cookies
+    session.cookies = cookies_read()
+except FileNotFoundError:  # 如果读取不到，就执行登录函数
+    sign_in()
+
+num = write_message()
+if num.status_code == 200:
+    print('评论成功发表！')
+else:
+    sign_in()
+    num = write_message()

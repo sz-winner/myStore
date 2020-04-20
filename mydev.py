@@ -1,3 +1,3 @@
-# 自定义函数
-# 1.判断输入的是否整数？
-# 2.密码输入框
+
+import matplotlib
+matplotlib.matplotlib_fname()
